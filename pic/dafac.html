@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAFAC System</title>
+    <style>
+        /* CSS Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .header h2 {
+            color: #0056b3;
+            margin: 5px 0;
+        }
+
+        .form-page {
+            display: none;
+        }
+
+        .form-page.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input[readonly] {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .privacy-notice {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #0056b3;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app-container">
+        <!-- Content will be dynamically loaded here by JavaScript -->
+    </div>
+
+    <script>
+        // JavaScript Code
+        document.addEventListener('DOMContentLoaded', function() {
+            // Application state
+            let currentPage = 'login';
+            let formData = {
+                user: {},
+                headOfFamily: {},
+                familyMembers: [],
+                vulnerableMembers: {}
+            };
+
+            // Ethnicity options
+            const ethnicityOptions = [
+                { value: '', text: 'Select Ethnicity (if applicable)' },
+                { value: 'aeta', text: 'Aeta' },
+                { value: 'ivatan', text: 'Ivatan' },
+                { value: 'mangyan', text: 'Mangyan' },
+                { value: 'igorot', text: 'Igorot' },
+                { value: 'lumad', text: 'Lumad' },
+                { value: 'badjao', text: 'Badjao' },
+                { value: 'other', text: 'Other Indigenous Group' },
+                { value: 'none', text: 'Not Applicable' }
+            ];
+
+            // DOM elements
+            const appContainer = document.getElementById('app-container');
+
+            // Render functions
+            function renderPage() {
+                switch(currentPage) {
+                    case 'login':
+                        renderLoginPage();
+                        break;
+                    case 'signup':
+                        renderSignupPage();
+                        break;
+                    case 'signup-confirm':
+                        renderSignupConfirmPage();
+                        break;
+                    case 'privacy':
+                        renderPrivacyPage();
+                        break;
+                    case 'head-of-family':
+                        renderHeadOfFamilyPage();
+                        break;
+                    case 'family-id':
+                        renderFamilyIdPage();
+                        break;
+                    case 'family-info':
+                        renderFamilyInfoPage();
+                        break;
+                    case 'add-member':
+                        renderAddMemberPage();
+                        break;
+                    case 'vulnerable-members':
+                        renderVulnerableMembersPage();
+                        break;
+                    case 'success':
+                        renderSuccessPage();
+                        break;
+                    default:
+                        renderLoginPage();
+                }
+            }
+
+            function renderLoginPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <h3>LOGIN</h3>
+                    
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    
+                    <p><a href="#" id="forgot-password">Forgot password?</a></p>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="login-btn">LOGIN</button>
+                    </div>
+                    
+                    <p>Don't have an account? <a href="#" id="signup-link">Sign Up</a></p>
+                `;
+                
+                document.getElementById('signup-link').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentPage = 'signup';
+                    renderPage();
+                });
+                
+                document.getElementById('login-btn').addEventListener('click', () => {
+                    // In a real app, you would validate credentials here
+                    currentPage = 'privacy';
+                    renderPage();
+                });
+            }
+
+            function renderSignupPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <h3>SIGN UP</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="middle-name">Middle Name</label>
+                            <input type="text" id="middle-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="birthdate">Birthdate</label>
+                            <input type="date" id="birthdate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sex">Sex</label>
+                            <select id="sex" required>
+                                <option value="">Select Sex</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Permanent Address</label>
+                        <input type="text" id="address" required>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-cancel" id="cancel-btn">CANCEL</button>
+                        <button class="btn btn-primary" id="next-btn">NEXT</button>
+                    </div>
+                `;
+                
+                document.getElementById('cancel-btn').addEventListener('click', () => {
+                    currentPage = 'login';
+                    renderPage();
+                });
+                
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    // Save basic user info
+                    formData.user = {
+                        firstName: document.getElementById('first-name').value,
+                        middleName: document.getElementById('middle-name').value,
+                        lastName: document.getElementById('last-name').value,
+                        birthdate: document.getElementById('birthdate').value,
+                        sex: document.getElementById('sex').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        address: document.getElementById('address').value
+                    };
+                    
+                    currentPage = 'signup-confirm';
+                    renderPage();
+                });
+            }
+
+            function renderSignupConfirmPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <h3>SIGN UP</h3>
+                    <h4>ACCOUNT CREDENTIALS</h4>
+                    
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                        <small>Password must contain at least 8 characters including numbers and symbols</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" required>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-cancel" id="back-btn">BACK</button>
+                        <button class="btn btn-primary" id="submit-btn">SUBMIT</button>
+                    </div>
+                `;
+                
+                document.getElementById('back-btn').addEventListener('click', () => {
+                    currentPage = 'signup';
+                    renderPage();
+                });
+                
+                document.getElementById('submit-btn').addEventListener('click', () => {
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirm-password').value;
+                    
+                    if (password !== confirmPassword) {
+                        alert('Passwords do not match!');
+                        return;
+                    }
+                    
+                    if (password.length < 8) {
+                        alert('Password must be at least 8 characters long!');
+                        return;
+                    }
+                    
+                    // Save credentials
+                    formData.user.username = document.getElementById('username').value;
+                    formData.user.password = password;
+                    
+                    currentPage = 'privacy';
+                    renderPage();
+                });
+            }
+
+            function renderPrivacyPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <div class="privacy-notice">
+                        <p>Republic Act No. 10173, also known as the Data Privacy Act of 2012, protects the privacy and integrity of personal information collected through information systems, such as this DAFAC Form. By filling out this form, you are voluntarily providing personal data that will be handled with strict confidentiality and used solely for its intended purpose. In accordance with this law, the data collected will not be shared with unauthorized parties and will be stored securely. Your submission signifies informed consent to process your information responsibly and lawfully.</p>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-cancel" id="disagree-btn">DISAGREE</button>
+                        <button class="btn btn-primary" id="agree-btn">AGREE</button>
+                    </div>
+                `;
+                
+                document.getElementById('disagree-btn').addEventListener('click', () => {
+                    currentPage = 'login';
+                    renderPage();
+                });
+                
+                document.getElementById('agree-btn').addEventListener('click', () => {
+                    currentPage = 'head-of-family';
+                    renderPage();
+                });
+            }
+
+            function renderHeadOfFamilyPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <h3>HEAD OF THE FAMILY</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" value="${formData.user.lastName || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" value="${formData.user.firstName || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="middle-name">Middle Name</label>
+                            <input type="text" id="middle-name" value="${formData.user.middleName || ''}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name-ext">Name Extension (Jr., Sr.)</label>
+                            <input type="text" id="name-ext">
+                        </div>
+                        <div class="form-group">
+                            <label for="birthdate">Birthdate</label>
+                            <input type="date" id="birthdate" value="${formData.user.birthdate || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sex">Sex</label>
+                            <select id="sex" required>
+                                <option value="">Select Sex</option>
+                                <option value="male" ${formData.user.sex === 'male' ? 'selected' : ''}>Male</option>
+                                <option value="female" ${formData.user.sex === 'female' ? 'selected' : ''}>Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthplace">Birthplace</label>
+                            <input type="text" id="birthplace" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="occupation">Occupation</label>
+                            <input type="text" id="occupation">
+                        </div>
+                        <div class="form-group">
+                            <label for="monthly-income">Monthly Family Net Income</label>
+                            <input type="number" id="monthly-income">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id-presented">ID Card Presented</label>
+                        <input type="text" id="id-presented">
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-cancel" id="cancel-btn">CANCEL</button>
+                        <button class="btn btn-primary" id="next-btn">NEXT</button>
+                    </div>
+                `;
+                
+                // Auto-calculate age from birthdate
+                const birthdateInput = document.getElementById('birthdate');
+                const ageInput = document.getElementById('age');
+                
+                birthdateInput.addEventListener('change', function() {
+                    const birthdate = new Date(this.value);
+                    if (isNaN(birthdate.getTime())) return;
+                    
+                    const today = new Date();
+                    let age = today.getFullYear() - birthdate.getFullYear();
+                    const monthDiff = today.getMonth() - birthdate.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) {
+                        age--;
+                    }
+                    
+                    ageInput.value = age;
+                });
+                
+                // If we have birthdate from signup, calculate age
+                if (formData.user.birthdate) {
+                    const birthdate = new Date(formData.user.birthdate);
+                    if (!isNaN(birthdate.getTime())) {
+                        const today = new Date();
+                        let age = today.getFullYear() - birthdate.getFullYear();
+                        const monthDiff = today.getMonth() - birthdate.getMonth();
+                        
+                        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) {
+                            age--;
+                        }
+                        
+                        ageInput.value = age;
+                    }
+                }
+                
+                document.getElementById('cancel-btn').addEventListener('click', () => {
+                    if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
+                        currentPage = 'login';
+                        formData = {
+                            user: {},
+                            headOfFamily: {},
+                            familyMembers: [],
+                            vulnerableMembers: {}
+                        };
+                        renderPage();
+                    }
+                });
+                
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    // Save head of family info
+                    formData.headOfFamily = {
+                        lastName: document.getElementById('last-name').value,
+                        firstName: document.getElementById('first-name').value,
+                        middleName: document.getElementById('middle-name').value,
+                        nameExt: document.getElementById('name-ext').value,
+                        birthdate: document.getElementById('birthdate').value,
+                        age: document.getElementById('age').value,
+                        sex: document.getElementById('sex').value,
+                        birthplace: document.getElementById('birthplace').value,
+                        occupation: document.getElementById('occupation').value,
+                        monthlyIncome: document.getElementById('monthly-income').value,
+                        idPresented: document.getElementById('id-presented').value
+                    };
+                    
+                    currentPage = 'family-id';
+                    renderPage();
+                });
+            }
+
+            function renderFamilyIdPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <h3>FAMILY IDENTIFICATION</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card-number">ID: Card Number</label>
+                            <input type="text" id="card-number">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-number">Contact Number</label>
+                            <input type="tel" id="contact-number" value="${formData.user.phone || ''}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="alternate-contact">Primary Alternate Contact</label>
+                            <input type="tel" id="alternate-contact">
+                        </div>
+                        <div class="form-group">
+                            <label for="permanent-address">Permanent Address</label>
+                            <input type="text" id="permanent-address" value="${formData.user.address || ''}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="4ps-beneficiary">4Ps Beneficiary</label>
+                            <select id="4ps-beneficiary" required>
+                                <option value="">Select Option</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ip-ethnicity">IP - Type of Ethnicity</label>
+                            <select id="ip-ethnicity">
+                                ${ethnicityOptions.map(opt => <option value="${opt.value}">${opt.text}</option>).join('')}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-secondary" id="back-btn">BACK</button>
+                        <button class="btn btn-primary" id="next-btn">NEXT</button>
+                    </div>
+                `;
+                
+                document.getElementById('back-btn').addEventListener('click', () => {
+                    currentPage = 'head-of-family';
+                    renderPage();
+                });
+                
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    // Save additional family info
+                    formData.familyInfo = {
+                        cardNumber: document.getElementById('card-number').value,
+                        contactNumber: document.getElementById('contact-number').value,
+                        alternateContact: document.getElementById('alternate-contact').value,
+                        permanentAddress: document.getElementById('permanent-address').value,
+                        is4psBeneficiary: document.getElementById('4ps-beneficiary').value,
+                        ipEthnicity: document.getElementById('ip-ethnicity').value
+                    };
+                    
+                    currentPage = 'family-info';
+                    renderPage();
+                });
+            }
+
+            function renderFamilyInfoPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <h3>FAMILY INFORMATION</h3>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Family Member</th>
+                                <th>Relation to Head</th>
+                                <th>Age</th>
+                                <th>Sex</th>
+                                <th>Education</th>
+                                <th>Occupation</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="family-members">
+                            ${formData.familyMembers.map(member => `
+                                <tr>
+                                    <td>${member.name}</td>
+                                    <td>${member.relation}</td>
+                                    <td>${member.age}</td>
+                                    <td>${member.sex}</td>
+                                    <td>${member.education}</td>
+                                    <td>${member.occupation}</td>
+                                    <td>${member.remarks}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-secondary" id="back-btn">BACK</button>
+                        <button class="btn btn-primary" id="add-member-btn">ADD MEMBER</button>
+                        <button class="btn btn-primary" id="next-btn">NEXT</button>
+                    </div>
+                `;
+                
+                document.getElementById('back-btn').addEventListener('click', () => {
+                    currentPage = 'family-id';
+                    renderPage();
+                });
+                
+                document.getElementById('add-member-btn').addEventListener('click', () => {
+                    currentPage = 'add-member';
+                    renderPage();
+                });
+                
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    if (formData.familyMembers.length === 0) {
+                        if (!confirm('You haven\'t added any family members. Are you sure you want to continue?')) {
+                            return;
+                        }
+                    }
+                    currentPage = 'vulnerable-members';
+                    renderPage();
+                });
+            }
+
+            function renderAddMemberPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <h3>ADD FAMILY MEMBER</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="member-name">Full Name</label>
+                            <input type="text" id="member-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="relation">Relation to Head</label>
+                            <input type="text" id="relation" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="member-age">Age</label>
+                            <input type="number" id="member-age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="member-sex">Sex</label>
+                            <select id="member-sex" required>
+                                <option value="">Select Sex</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="education">Educational Attainment</label>
+                            <input type="text" id="education">
+                        </div>
+                        <div class="form-group">
+                            <label for="occupation">Occupational Skills</label>
+                            <input type="text" id="occupation">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="remarks">Remarks</label>
+                        <input type="text" id="remarks">
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-secondary" id="back-btn">BACK</button>
+                        <button class="btn btn-primary" id="submit-btn">SUBMIT</button>
+                    </div>
+                `;
+                
+                document.getElementById('back-btn').addEventListener('click', () => {
+                    currentPage = 'family-info';
+                    renderPage();
+                });
+                
+                document.getElementById('submit-btn').addEventListener('click', () => {
+                    // Add new family member
+                    const newMember = {
+                        name: document.getElementById('member-name').value,
+                        relation: document.getElementById('relation').value,
+                        age: document.getElementById('member-age').value,
+                        sex: document.getElementById('member-sex').value,
+                        education: document.getElementById('education').value,
+                        occupation: document.getElementById('occupation').value,
+                        remarks: document.getElementById('remarks').value
+                    };
+                    
+                    formData.familyMembers.push(newMember);
+                    currentPage = 'family-info';
+                    renderPage();
+                });
+            }
+
+            function renderVulnerableMembersPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <h3>VULNERABLE FAMILY MEMBERS</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pregnant-mothers">Pregnant/Lactating Mothers</label>
+                            <input type="number" id="pregnant-mothers" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="elderly">Elderly (60+ years)</label>
+                            <input type="number" id="elderly" min="0" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="medical-conditions">With Medical Conditions</label>
+                            <input type="number" id="medical-conditions" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="other-vulnerable">Other Vulnerable</label>
+                            <input type="number" id="other-vulnerable" min="0" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-secondary" id="back-btn">BACK</button>
+                        <button class="btn btn-primary" id="submit-btn">SUBMIT FORM</button>
+                    </div>
+                `;
+                
+                document.getElementById('back-btn').addEventListener('click', () => {
+                    currentPage = 'family-info';
+                    renderPage();
+                });
+                
+                document.getElementById('submit-btn').addEventListener('click', () => {
+                    // Save vulnerable members info
+                    formData.vulnerableMembers = {
+                        pregnantMothers: parseInt(document.getElementById('pregnant-mothers').value) || 0,
+                        elderly: parseInt(document.getElementById('elderly').value) || 0,
+                        medicalConditions: parseInt(document.getElementById('medical-conditions').value) || 0,
+                        otherVulnerable: parseInt(document.getElementById('other-vulnerable').value) || 0
+                    };
+                    
+                    // In a real app, you would send formData to your backend here
+                    console.log('Form data to be submitted:', formData);
+                    
+                    currentPage = 'success';
+                    renderPage();
+                });
+            }
+
+            function renderSuccessPage() {
+                appContainer.innerHTML = `
+                    <div class="header">
+                        <h2>Republic of the Philippines</h2>
+                        <h2>Department of Social Welfare and Development</h2>
+                        <h2>DISASTER ASSISTANCE FAMILY ACCESS CARD (DAFAC)</h2>
+                    </div>
+                    
+                    <div class="success-message">
+                        <h3>SUCCESSFULLY SUBMITTED!</h3>
+                        <p>This is a confirmation message that your data has already been saved. This ensures that your information has been securely recorded in the system and eliminates the need for readmission. If you attempt to re-enter the same data, the system may alert you that it already exists to prevent duplication and maintain data integrity.</p>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="done-btn">DONE</button>
+                    </div>
+                `;
+                
+                document.getElementById('done-btn').addEventListener('click', () => {
+                    // Reset form and return to login
+                    formData = {
+                        user: {},
+                        headOfFamily: {},
+                        familyMembers: [],
+                        vulnerableMembers: {}
+                    };
+                    currentPage = 'login';
+                    renderPage();
+                });
+            }
+
+            // Initialize the application
+            renderPage();
+        });
+    </script>
+</body>
+</html>
