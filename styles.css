@@ -1,0 +1,315 @@
+
+body{margin: 0; 
+  height: 100vh;
+  background: rgb(247, 245, 245); 
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center;
+}
+
+
+a:hover{
+   text-decoration:underline;
+   color: white;
+}
+
+
+a:visited{
+   color:rgb(255, 255, 255);
+   text-decoration: underline;         
+   text-decoration-color: rgb(255, 255, 255); 
+}
+
+.separate{
+  background-color: red;
+  height:5px;
+}
+
+.separate p{
+  visibility:hidden;
+}
+
+/*front page*/
+.front {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left:20px;
+  height: 150px;
+  background:rgb(255, 255, 255);
+  background-size: cover; 
+  background-repeat: no-repeat;
+   
+}
+
+.content{
+    text-align:left;
+    line-height: 0.1;
+    font-family: Arial, Helvetica, sans-serif;
+    height:100px;
+    
+    
+}
+
+.content h3{
+  color:rgb(42, 42, 175);
+}
+.content p{
+  color:black;
+}
+
+.options {
+  position: absolute;
+  background-color: rgba(114, 114, 255, 0.559);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 90px 452px;
+  border-radius:26px;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  margin-top:150px;
+  width:max-content;
+  
+}
+
+.options a {
+  text-decoration: none;
+  font-size: 1.3rem;
+  color: #351ee2;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color: rgba(246, 246, 246, 0.962);
+  padding: 0.5rem 1rem;       
+  border-radius: 15px;          
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+  text-align:center;
+  margin-top: 40px;
+  
+}
+
+.steps{
+  display:flex;
+  flex-direction: column;
+  color: #ffffff;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color: rgb(45, 40, 187);
+  padding: 0.5rem 5rem;       
+  border-radius: 15px;          
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+  text-align:left;
+  align-items:flex-start;
+
+}
+
+
+
+
+.options a:hover{
+ background-color:rgb(7, 7, 105);
+ color:white;
+}
+
+.box1{
+  background-image: url('pic/dswdbg.jpg');
+  background-size: cover; 
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  padding: 60px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+}
+
+
+h3{
+    color: rgb(0, 0, 0);
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+
+h4{
+        color:rgb(0, 0, 0);
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }  
+
+button{
+        color: rgb(30, 6, 16);
+        border-color: azure;
+        border-radius: 5px;  
+    }
+
+.red{
+        background:rgb(81, 73, 81);
+        padding:  40px ;  
+    }
+
+
+img{
+    width:200px;
+}
+
+
+
+ul{
+        margin: 0;
+        padding: 20px;
+        list-style: none;
+        display:flex;
+
+    }
+
+h3{
+        color: rgb(242, 238, 238);
+  }
+
+li{
+        background: rgb(248, 246, 246);
+        width: 100px;
+        text-align: center;
+        border-radius: 5px;
+        display: inline-block;
+        margin-right: 20px;  
+  }
+
+
+
+  /*bottom/footer section*/
+
+.footer0{
+  display: flex;
+  justify-content: flex-start;
+  padding-left:100px;
+  background:rgb(36, 44, 152);
+  background-size: cover; 
+  background-repeat: no-repeat;
+  height:320px;
+  gap:150px;
+  
+}
+
+
+.f1{
+  display:flex;
+  justify-content:center;
+  background-color:rgb(173, 173, 173);
+  background-size:cover;
+}
+
+.f1 h5{
+  color:white;
+  font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.col0{
+  margin-top:40px;
+}
+
+.col02{
+  display:flex;
+  margin-left:43px;
+  margin-top:30px;
+  gap:20px;
+}
+
+.col02 img{
+  width: 24px;        
+  height: 24px;
+}
+
+.col1{
+  margin-top:30px
+}
+
+.col2{
+  margin-top:30px
+}
+
+.col3{
+  display: flex;          
+  gap: 0px; 
+  margin-top:30px     
+}
+
+
+.col1 h4{
+  color:rgb(255, 255, 255);
+  text-align: left;
+  
+}
+
+
+
+.contacts{
+  color:rgb(255, 255, 255);
+  text-align: left;
+  font-family:Arial, Helvetica, sans-serif;
+  line-height: 0.8;
+}
+
+.subcol1{
+  line-height: 0.6;
+}
+
+
+
+
+
+.col2 h5{
+  color:rgb(207, 207, 207);
+  text-align: left;
+  
+  
+}
+
+.subcol2{
+  line-height: 0.6;
+}
+
+
+.col3 img{
+  margin-left: 0px;
+  margin-top:50px;
+  width: 40px;
+  height: 40px;
+  
+}
+
+.col3 button{
+  margin-top:50px;
+  height: 50px;
+  bottom:20px;
+  border-radius:15px;
+}
+
+#Topbot:hover{
+  background-color: rgb(66, 66, 255);
+}
+
+.footer2{
+  display: flex;
+  justify-content: center;
+  padding-left:100px;
+  background:rgb(12, 6, 66);
+  background-size: cover; 
+  background-repeat: no-repeat;
+  height:90px;
+}
+
+.footer2 p{
+  color:white;
+  text-align:center;
+  margin-top:40px;
+}
+
+
+
+   
+
+   
+
+    
+
