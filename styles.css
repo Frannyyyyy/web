@@ -113,15 +113,21 @@ a:visited{
 }
 
 .box1{
-  background-image: url('pic/dswdbg.jpg');
+  background: url('pic/dswdbg.jpg');
   background-size: cover; 
   height: 100vh;
   background-size: cover;
   background-position: center;
   padding: 60px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
-
+  background-attachment: fixed;
+  min-height: 100vh;
+  background-blend-mode: overlay;
+  background-color: rgba(151, 172, 247, 0.792);
+  
 }
+
+
 
 
 h3{
@@ -172,7 +178,6 @@ li{
         display: inline-block;
         margin-right: 20px;  
   }
-
 
 
   /*bottom/footer section*/
@@ -242,7 +247,6 @@ li{
 }
 
 
-
 .contacts{
   color:rgb(255, 255, 255);
   text-align: left;
@@ -253,9 +257,6 @@ li{
 .subcol1{
   line-height: 0.6;
 }
-
-
-
 
 
 .col2 h5{
@@ -282,7 +283,7 @@ li{
   margin-top:50px;
   height: 50px;
   bottom:20px;
-  border-radius:15px;
+  border-radius:15px !important;
 }
 
 #Topbot:hover{
@@ -303,6 +304,7 @@ li{
   color:white;
   text-align:center;
   margin-top:40px;
+  right:100px;
 }
 
 

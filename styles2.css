@@ -1,7 +1,5 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f7f7f7;
-  
 }
 
 /*diverse screens*/
@@ -12,6 +10,11 @@ body {
 }
 
 
+.upper{
+  background:#3498db;
+  background-blend-mode: overlay;
+  background-color: rgba(182, 197, 250, 0.85);
+}
 
 form {
   height: 100%;
@@ -34,11 +37,12 @@ form {
 .fields0{
   position:relative;
   top:20px;
+
 }
 
 #form4{
   position:relative;
-  top: 50px;
+  top: 30px;
 }
 
 #form5{
@@ -57,7 +61,7 @@ cursor: pointer;
 font-size: 16px;}
 
 .submit-button:hover {
-      background-color: #7482ff;
+  background-color: #7482ff;
 }
 
 
@@ -74,7 +78,7 @@ font-size: 16px;}
 .sec0{
   display:flex;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
   padding: auto;
 }
 
@@ -97,6 +101,19 @@ font-size: 16px;}
 }
 
 
+  .no-spin::-webkit-outer-spin-button,
+  .no-spin::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* Firefox */
+  .no-spin {
+    -moz-appearance: textfield;
+  }
+
+
+/*forms*/
 .form-container {
   max-width: 800px;
   margin: auto;
@@ -107,6 +124,11 @@ font-size: 16px;}
   width:500px;
   
 }
+
+#family-members-container{
+  gap:30px;
+}
+
 
 form h2 {
   text-align: left;
@@ -120,6 +142,13 @@ form label {
   font-weight: 600;
   color:#000000;
 }
+
+.butt1{
+  display:flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
 
 
 form input,
@@ -148,3 +177,43 @@ button:hover {
 }
 
 
+ #add-member-btn {
+  padding: 10px 15px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer; }
+input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 300px;
+}                 
+
+.form-container {
+  position: relative; /* Needed for absolute positioning of X button */
+  border: 1px solid #431dec;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+button.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  width: 25px;
+  height: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+    }
+button.delete-btn:hover {
+  background: #cc0000;}

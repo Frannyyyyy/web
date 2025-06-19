@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Working Family Form</title>
+    <style>
+        .family-form {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            background: #f9f9f9;
+        }
+        #add-member-btn {
+            padding: 10px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input {
+            display: block;
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Head of Family (Existing Form) -->
+<div class="family-form" id="head-of-family">
+    <h2>Head of Family</h2>
+    <input type="text" placeholder="Full Name" required>
+    <input type="text" value="Head" readonly>
+</div>
+
+<!-- Family Members Will Appear Here -->
+<div id="family-members-container"></div>
+
+<!-- Add Button -->
+<button id="add-member-btn">Add Family Member</button>
+
+<script>
+    // Wait until page is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('family-members-container');
+        const addButton = document.getElementById('add-member-btn');
+        let memberCount = 0;
+        
+        addButton.addEventListener('click', function() {
+            memberCount++;
+            
+            const newForm = document.createElement('div');
+            newForm.className = 'family-form';
+            newForm.innerHTML = `
+                <h3>Family Member ${memberCount}</h3>
+                <input type="text" placeholder="Full Name">
+                <input type="text" placeholder="Relationship (Spouse, Child, etc.)">
+                <input type="number" placeholder="Age">
+            `;
+            
+            container.appendChild(newForm);
+            
+            // Scroll to the new form
+            newForm.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+
+</body>
+</html>
