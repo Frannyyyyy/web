@@ -10,8 +10,10 @@ body {
 }
 
 
+
 .upper{
-  background:#3498db;
+  
+  background:#3827f6;
   background-blend-mode: overlay;
   background-color: rgba(182, 197, 250, 0.85);
 }
@@ -64,7 +66,11 @@ font-size: 16px;}
   background-color: #7482ff;
 }
 
-
+.butt1 a{
+  border-radius: 8px;
+  background-color: #4043ff;
+  justify-content: center;
+}
 
 
 
@@ -73,6 +79,7 @@ font-size: 16px;}
 .supersec{
   display: flex;
   flex-direction: row;
+  
 }
 
 .sec0{
@@ -100,6 +107,7 @@ font-size: 16px;}
   margin-top:13px;
 }
 
+  
 
   .no-spin::-webkit-outer-spin-button,
   .no-spin::-webkit-inner-spin-button {
@@ -111,6 +119,15 @@ font-size: 16px;}
   .no-spin {
     -moz-appearance: textfield;
   }
+
+  .return-con{
+    background-color:#ccc;
+  }
+
+.return-but{
+  
+}
+
 
 
 /*forms*/
